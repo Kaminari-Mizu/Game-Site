@@ -3,12 +3,15 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterFormData, registerSchema } from '../utils/loginValidation';
 import { mockRegister } from '../api/mockAuth';
-import { useNavigate } from 'react-router-dom';
 import { Button, TextInput, Paper, Title, Text, Anchor, Notification } from '@mantine/core';
 import { IconX, IconCheck } from '@tabler/icons-react';
 
-const RegisterForm: React.FC = () => {
- const navigate = useNavigate();
+interface RegisterFormProps {
+  closeModal: () => void;
+  openLoginModal?: () => void;
+}
+
+const RegisterForm: React.FC<RegisterFormProps> = ({ closeModal, openLoginModal}) => {
   const [error, setError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState<string | null>(null);
 
@@ -21,7 +24,10 @@ const RegisterForm: React.FC = () => {
       const response = await mockRegister({ username: data.username, password: data.password });
       setSuccess(response.message);
       setError(null);
-      setTimeout(() => navigate('/login'), 2000);
+      setTimeout(() => {
+        closeModal();
+        if(openLoginModal) openLoginModal();
+      }, 2000);
     } catch (err: any) {
       const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
       setError(errorMessage);
@@ -30,8 +36,10 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <Paper shadow="md" p="lg" withBorder style={{ maxWidth: 400, margin: 'auto', marginTop: 100 }}>
-      <Title order={2} ta="center" mb="md">Register</Title>
+<Paper shadow="md" p="lg" withBorder style={{ maxWidth: 400, backgroundColor: '#1d1e30' }}>
+      <Title order={2} ta="center" mb="md" c="seaGreen.0" style={{ fontFamily: "'Yuji Syuku', sans-serif" }}>
+        Register
+      </Title>
       {error && (
         <Notification icon={<IconX size={18} />} color="red" onClose={() => setError(null)} mb="md">
           {error}
@@ -49,6 +57,11 @@ const RegisterForm: React.FC = () => {
           {...register('username')}
           error={errors.username?.message}
           mb="md"
+          c="gray.2"
+          styles={{
+            label: { color: '#d5d7e0' },
+            input: { backgroundColor: '#2b2c3d', color: '#d5d7e0', borderColor: '#4d4f66' },
+          }}
         />
         <TextInput
           label="Password"
@@ -57,6 +70,11 @@ const RegisterForm: React.FC = () => {
           {...register('password')}
           error={errors.password?.message}
           mb="md"
+          c="gray.2"
+          styles={{
+            label: { color: '#d5d7e0' },
+            input: { backgroundColor: '#2b2c3d', color: '#d5d7e0', borderColor: '#4d4f66' },
+          }}
         />
         <TextInput
           label="Confirm Password"
@@ -65,14 +83,26 @@ const RegisterForm: React.FC = () => {
           {...register('confirmPassword')}
           error={errors.confirmPassword?.message}
           mb="md"
+          c="gray.2"
+          styles={{
+            label: { color: '#d5d7e0' },
+            input: { backgroundColor: '#2b2c3d', color: '#d5d7e0', borderColor: '#4d4f66' },
+          }}
         />
-        <Button type="submit" fullWidth loading={isSubmitting} mb="md">
+        <Button type="submit" fullWidth loading={isSubmitting} mb="md" color="seaGreen.0">
           Register
         </Button>
       </form>
-      <Text ta="center" size="sm">
+      <Text ta="center" size="sm" c="gray.2">
         Already have an account?{' '}
-        <Anchor component="a" href="/login">
+        <Anchor
+          component="button"
+          c="seaGreen.0"
+          onClick={() => {
+            closeModal();
+            if (openLoginModal) openLoginModal();
+          }}
+        >
           Login
         </Anchor>
       </Text>
