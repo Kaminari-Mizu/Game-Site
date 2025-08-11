@@ -13,7 +13,6 @@ const links = [
   { link: 'about', label: 'About' },
   { link: 'characters', label: 'Characters' },
   { link: 'location', label: 'Location' },
-  { link: 'gameMechanics', label: 'Gameplay' },
   { link: 'download', label: 'Download' },
 ];
 
