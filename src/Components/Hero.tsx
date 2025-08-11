@@ -26,7 +26,7 @@ const Hero: React.FC = () => {
                     Underwater Horror RPG
                 </Title>
                 <Text size="xl" c="gray.2" ta="center" style={{ fontFamily: "'Yuji Syuku', sans-serif" }}>
-                    Tagline
+                    Fear the deep
                 </Text>
                 <Button component={ScrollLink} to="about" smooth={true} duration={800} size="lg" radius="md" color="seaGreen.0">
                     Learn More
