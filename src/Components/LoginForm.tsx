@@ -2,7 +2,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginFormData, loginSchema } from '../utils/loginValidation';
-import { mockLogin } from '../api/mockAuth';
+//import { mockLogin } from '../api/mockAuth';
+import { login } from '../api/authApi';
 import { useAuth } from '../context/AuthContext';
 import { Button, TextInput, Paper, Title, Text, Anchor, Notification } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
@@ -22,7 +23,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ closeModal, openRegisterModal }) 
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const response = await mockLogin(data);
+      //const response = await mockLogin(data);
+      const response = await login(data);
       authLogin(response.token, response.user);
       setError(null);
       closeModal();

@@ -5,7 +5,6 @@ import Footer from "./Footer";
 import About from "./About";
 import Characters from "./Characters";
 import Location from "./Location";
-import GameMechanics from "./GameMechanics";
 import Download from "./Download";
 
 
@@ -16,7 +15,6 @@ const Home: React.FC = () => {
             <About/>
             <Characters/>
             <Location/>
-            <GameMechanics/>
             <Download/>
             <Footer/>
         </Box>

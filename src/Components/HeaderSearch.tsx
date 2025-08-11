@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Burger, Group, Transition, Paper, Text, Modal, useMantineTheme } from '@mantine/core';
+import { Burger, Group, Transition, Paper, Text, Modal, Menu, ActionIcon, useMantineTheme } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { Link as ScrollLink } from 'react-scroll';
+import { IconUser, IconLogout } from '@tabler/icons-react';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
+import { useAuth } from '../context/AuthContext';
 import classes from '../Styling/HeaderSearch.module.scss';
 
 const links = [
@@ -11,10 +13,7 @@ const links = [
   { link: 'about', label: 'About' },
   { link: 'characters', label: 'Characters' },
   { link: 'location', label: 'Location' },
-  { link: 'gameMechanics', label: 'Gameplay' },
   { link: 'download', label: 'Download' },
-  { link: 'login', label: 'Login', isModal: true },
-  { link: 'register', label: 'Register', isModal: true },
 ];
 
 export function HeaderSearch() {
@@ -26,6 +25,7 @@ export function HeaderSearch() {
   const isAboveSm = useMediaQuery(`(min-width: ${theme.breakpoints.sm})`, true, {
     getInitialValueInEffect: false,
   });
+  const { user, logout } = useAuth(); // Access user and logout from AuthContext
 
   useEffect(() => {
     if (isAboveSm && opened) {
@@ -34,36 +34,16 @@ export function HeaderSearch() {
   }, [isAboveSm, opened, close]);
 
   useEffect(() => {
-    console.log('Login Modal Opened:', loginModalOpened);
-    console.log('Register Modal Opened:', registerModalOpened);
-    if (loginModalOpened || registerModalOpened) {
-      console.log('Modal should be visible. Check DOM for .mantine-Modal-content');
-    }
-  }, [loginModalOpened, registerModalOpened]);
+    console.log('User State:', user);
+  },[user]) 
 
-  const items = links.map((link) =>
-    link.isModal ? (
-      <Text
-        key={link.label}
-        component="button"
-        className={classes.link}
-        c={active === link.link ? 'seaGreen.0' : 'gray.2'}
-        onClick={() => {
-          setActive(link.link);
-          if (link.link === 'login') {
-            setLoginModalOpened(true);
-            setRegisterModalOpened(false);
-          } else if (link.link === 'register') {
-            setRegisterModalOpened(true);
-            setLoginModalOpened(false);
-          }
-          close();
-        }}
-        style={{ fontFamily: "'Yuji Syuku', sans-serif" }}
-      >
-        {link.label}
-      </Text>
-    ) : (
+  const handleSignOut = () => {
+    logout();
+    setActive('hero'); // Reset active link
+  };
+
+  const items = [
+    ...links.map((link) => (
       <ScrollLink
         key={link.label}
         to={link.link}
@@ -79,8 +59,71 @@ export function HeaderSearch() {
       >
         {link.label}
       </ScrollLink>
-    )
-  );
+    )),
+    user ? (
+      <Menu key="profile" shadow="md" width={200}>
+        <Menu.Target>
+          <Group gap={8} style={{ cursor: 'pointer' }}>
+            <ActionIcon
+              variant="transparent"
+              color="seaGreen.0"
+              onClick={() => setActive('profile')}
+              aria-label="Profile"
+            >
+              <IconUser size={18} />
+            </ActionIcon>
+            <Text
+              c={active === 'profile' ? 'seaGreen.0' : 'gray.2'}
+              style={{ fontFamily: "'Yuji Syuku', sans-serif" }}
+            >
+              {user.userName || 'User'}
+            </Text>
+          </Group>
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Item
+            leftSection={<IconLogout size={14} />}
+            onClick={handleSignOut}
+          >
+            Sign Out
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
+    ) : (
+      [
+        <Text
+          key="login"
+          component="button"
+          className={classes.link}
+          c={active === 'login' ? 'seaGreen.0' : 'gray.2'}
+          onClick={() => {
+            setActive('login');
+            setLoginModalOpened(true);
+            setRegisterModalOpened(false);
+            close();
+          }}
+          style={{ fontFamily: "'Yuji Syuku', sans-serif" }}
+        >
+          Login
+        </Text>,
+        <Text
+          key="register"
+          component="button"
+          className={classes.link}
+          c={active === 'register' ? 'seaGreen.0' : 'gray.2'}
+          onClick={() => {
+            setActive('register');
+            setRegisterModalOpened(true);
+            setLoginModalOpened(false);
+            close();
+          }}
+          style={{ fontFamily: "'Yuji Syuku', sans-serif" }}
+        >
+          Register
+        </Text>,
+      ]
+    ),
+  ];
 
   return (
     <header className={classes.header}>

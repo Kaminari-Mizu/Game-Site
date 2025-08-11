@@ -1,28 +1,27 @@
 import React from 'react';
 import { Container, Title, Text } from '@mantine/core';
-import horrorloop from '../assets/Cthulhu2.mp4'
+import horrorLoop from '../assets/scaryUw.mp4'
 
 const Location: React.FC = () => {
     return (
         <section id="location" style={{position: 'relative', minHeight: '100vh', overflow: 'hidden'}}>
-        <video
-         autoPlay
-         loop
-         muted
-         playsInline
-         style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            opacity: 0.3,
-            zIndex: 0,
-            filter: 'brightness(100%)',
-         }}
-        >
-            <source src={horrorloop} type="video/mps4"/>
+       <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    opacity: 0.3, // Subtle opacity to ensure text readability
+                    zIndex: 0,
+                }}
+            >
+            <source src={horrorLoop} type="video/mp4"/>
         </video>
         <Container py={80} fluid style={{position: 'relative', zIndex: 1, background: 'rgba(0,0,0,0.5'}}>
             <Title

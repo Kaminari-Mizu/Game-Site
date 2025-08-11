@@ -2,7 +2,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterFormData, registerSchema } from '../utils/loginValidation';
-import { mockRegister } from '../api/mockAuth';
+import { register as apiRegister } from '../api/authApi';
+//import { mockRegister } from '../api/mockAuth';
 import { Button, TextInput, Paper, Title, Text, Anchor, Notification } from '@mantine/core';
 import { IconX, IconCheck } from '@tabler/icons-react';
 
@@ -21,7 +22,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ closeModal, openLoginModal}
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const response = await mockRegister({ username: data.username, password: data.password });
+      //const response = await mockRegister({ username: data.username, password: data.password });
+      const response = await apiRegister({ username: data.username, password: data.password });
       setSuccess(response.message);
       setError(null);
       setTimeout(() => {
